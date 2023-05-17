@@ -1,0 +1,117 @@
+version: "3"
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - app
+  example1:
+    env_file:
+        - .${EXAMPLE1_ROOT_PATH}/.env
+    image: bryanjlittlefield/tugboat-php:${PHP_VERSION}
+    container_name: ${PROJECT_NAME}_web1
+    volumes:
+        # Mount Files to Container on build
+        - .${EXAMPLE1_ROOT_PATH}/scripts/build-files:/usr/local/bin/build-files
+        # Mount Apaches Log Files on Host
+        - .${EXAMPLE1_ROOT_PATH}/var/log/apache2:/var/log/apache2
+        # Example of a Host Mounted Volume
+        - .${EXAMPLE1_HTML_DOCUMENT_ROOT}:${DOCUMENT_ROOT}
+        # Mount PHP configuration file
+        - .${EXAMPLE1_ROOT_PATH}/config/php/php.ini:/usr/local/etc/php/php.ini
+        # Mount SSL configuration file
+        - .${EXAMPLE1_ROOT_PATH}/config/ssh/sshd_config:/etc/ssh/sshd_config
+    links:
+        - mysqldb1:mysql
+        - redis:redis
+        - mailhog:mailhog
+    restart: on-failure
+    networks:
+      - app
+  example2:
+    env_file:
+        - .${EXAMPLE2_ROOT_PATH}/.env
+    image: bryanjlittlefield/tugboat-php:${PHP_VERSION}
+    container_name: ${PROJECT_NAME}_web2
+    volumes:
+        # Mount Files to Container on build
+        - .${EXAMPLE2_ROOT_PATH}/scripts/build-files:/usr/local/bin/build-files
+        # Mount Apaches Log Files on Host
+        - .${EXAMPLE2_ROOT_PATH}/var/log/apache2:/var/log/apache2
+        # Example of a Host Mounted Volume
+        - .${EXAMPLE2_HTML_DOCUMENT_ROOT}:${DOCUMENT_ROOT}
+        # Mount PHP configuration file
+        - .${EXAMPLE2_ROOT_PATH}/config/php/php.ini:/usr/local/etc/php/php.ini
+        # Mount SSL configuration file
+        - .${EXAMPLE2_ROOT_PATH}/config/ssh/sshd_config:/etc/ssh/sshd_config
+    links:
+        - mysqldb1:mysql
+        - redis:redis
+        - mailhog:mailhog
+    restart: on-failure
+    networks:
+      - app
+  mysqldb1:
+    env_file:
+        - .${MYSQLDB1_ROOT_PATH}/.env
+    image: bryanjlittlefield/tugboat-mysql:${MYSQL_VERSION}
+    container_name: ${PROJECT_NAME}_db
+    volumes:
+        # Mount MySQL Database Files on Host
+        - .${MYSQLDB1_ROOT_PATH}/var/lib/mysql:/var/lib/mysql
+        # Mount MySQL Log Files on Host
+        - .${MYSQLDB1_ROOT_PATH}/var/log/mysql:/var/log/mysql
+        # Mount MySQL Config File on Host
+        - .${MYSQLDB1_ROOT_PATH}/config/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+        - "3306:3306"
+    restart: on-failure
+    networks:
+      - app
+  mongodb1:
+    image: mongo
+    env_file:
+        - .${MONGODB1_ROOT_PATH}/.env
+    container_name: ${PROJECT_NAME}_mongo
+    restart: on-failure
+    volumes:
+        - .${MONGODB1_ROOT_PATH}/var/mongo:/data/db
+    ports:
+        - "27017:27017"
+    command: --storageEngine wiredTiger
+    networks:
+      - app
+  redis:
+    image: redis
+    container_name: ${PROJECT_NAME}_redis
+    ports:
+        - "6379:6379"
+  mailhog:
+    image: mailhog/mailhog
+    container_name: ${PROJECT_NAME}_mailhog
+    hostname: mailhog
+    ports:
+        - "8025:8025"
+        - "1025:1025"
+    networks:
+      - app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${PROJECT_NAME}_phpmyadmin
+    environment:
+        - PMA_HOSTS=mysqldb1
+        - VIRTUAL_HOST=app4.donutfy.com
+    restart: on-failure
+    ports:
+        - 8080:80
+    volumes:
+        - /sessions
+    networks:
+      - app
+networks:
+  app:

@@ -1,0 +1,7 @@
+AH00112: Warning: DocumentRoot [/var/www/html/public] does not exist
+AH00112: Warning: DocumentRoot [/var/www/html/public] does not exist
+[Thu May 11 18:45:00.992509 2023] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.53 (Debian) PHP/8.0.19 OpenSSL/1.1.1n configured -- resuming normal operations
+[Thu May 11 18:45:00.992609 2023] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu May 11 18:48:10.234840 2023] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Thu May 11 18:48:30.871501 2023] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.53 (Debian) PHP/8.0.19 OpenSSL/1.1.1n configured -- resuming normal operations
+[Thu May 11 18:48:30.871967 2023] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
