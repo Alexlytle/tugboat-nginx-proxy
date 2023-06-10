@@ -26,6 +26,14 @@ services:
         - .${EXAMPLE1_ROOT_PATH}/config/php/php.ini:/usr/local/etc/php/php.ini
         # Mount SSL configuration file
         - .${EXAMPLE1_ROOT_PATH}/config/ssh/sshd_config:/etc/ssh/sshd_config
+         # Example of a Named Data Volume
+        #- web-data-volume:/var/www/html
+    # ports:
+    #     - "1080:1080"
+    #     - "3001:3001"
+    #     - "3000:3000"
+    #     - "10000:10000"
+    #     - "2222:22"
     links:
         - mysqldb1:mysql
         - redis:redis
