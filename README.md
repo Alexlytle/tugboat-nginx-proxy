@@ -5,8 +5,9 @@
 > Built on top of the [Official](https://docs.docker.com/docker-hub/official_images/) Docker Images for [Php](https://hub.docker.com/_/php) and [MySQL](https://hub.docker.com/_/mysql), these preconfigured containers will jumpstart your php website or application development. If the environment requires further configurations dont sweat it, TUGBOAT can be extended to provided access to additional packages and configurations to the environment using [build scripts](https://github.com/bryanlittlefield/TUGBOAT/wiki/Running-Scripts-in-the-Web-Container-on-Build).  
 
 - - - -
-> This documentation is based inside the root directoy under the folder called tugboat of you VPS hosting using Ubuntu, Please make sure docker in installed.
-# Installing Laravel App:
+# Requirements 
+> This documentation is based inside the root directory under the folder created called 'tugboat' on your VPS hosting, which is running Ubuntu. Please ensure that Docker is installed.
+# Installing Laravel:
 1.  Add the following new records to the .env file in the root directory. <br/>
 File directory: /root/tugboat/.env <br/>
 Example:
@@ -226,7 +227,6 @@ WORDPRESS_DB_NAME=wordpress
 
 ```
 Edit wp-config.php
-
 ```
 define( 'DB_NAME', 'store-wordpress' );
 /** Database username */
