@@ -115,7 +115,7 @@ services:
     container_name: ${PROJECT_NAME}_phpmyadmin
     environment:
         - PMA_HOSTS=mysqldb1
-        - VIRTUAL_HOST=app4.donutfy.com
+        - VIRTUAL_HOST=phpmyadmin.example.com
     restart: on-failure
     ports:
         - 8080:80
