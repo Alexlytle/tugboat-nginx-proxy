@@ -6,7 +6,7 @@
 
 - - - -
 > This documentation is based inside the root directoy under the folder called tugboat of you VPS hosting using Ubuntu, Please make sure docker in installed.
-# Running a new Laravel App:
+# Installing Laravel App:
 1.  Add the following new records to the .env file in the root directory. <br/>
 File directory: /root/tugboat/.env <br/>
 Example:
@@ -122,6 +122,135 @@ chown -R www-data:www-data \
 Install dependencies 
 ```
 composer install && php artisan key:generate
+```
+
+
+# Installing Wordpress App
+1. Add a new record to .env file in the root directory as follows.
+```
+# ==============================
+# EXAMPLE WORDPRESS
+# ==============================
+WORDPRESS_ROOT_PATH=/mount/example
+WORDPRESS_URL=example.com
+```
+2. Create a new container in the docker.yml file:
+```
+  donutfy_store_staging:
+    env_file:
+        - .${DONUTFY_STORE_ROOT_PATH_STAGING}/.env  
+    image: bryanjlittlefield/tugboat-php:${PHP_VERSION}
+    container_name: ${PROJECT_NAME}_donutfy_store_staging
+    volumes:
+        - .${DONUTFY_STORE_ROOT_PATH_STAGING}:${DOCUMENT_ROOT}
+    restart: on-failure
+    environment:
+        - VIRTUAL_HOST=store-staging.donutfy.com
+    networks:
+      - app
+```
+3. Run tugboat inside new directory
+cd inside new directory and run
+```
+git clone https://github.com/bryanlittlefield/TUGBOAT.git .
+```
+4. Inside /var/www/html install Wordpress.
+```
+wget http://wordpress.org/latest.tar.gz && tar xfz latest.tar.gz && mv wordpress/* ./ && rmdir ./wordpress/ && rm -f latest.tar.gz
+```
+Give permissions:
+```
+chmod -R 777  path_to_wpcontent/www/html
+```
+5. Edit Files
+<br/>
+Copy and paste this .env inside the root directory of your wordpress project directory edit virtual host, server name and webroot:
+
+```
+# ==============================
+# WEB
+# ==============================
+VIRTUAL_HOST="${DONUTFY_STORE_URL_PROD}"
+#PHP
+MAX_EXECUTION_TIME=0
+MAX_INPUT_TIME=0
+MAX_INPUT_VARS=1500
+MEMORY_LIMIT=-1
+POST_MAX_SIZE=0
+UPLOAD_MAX_FILESIZE=2048M
+DATE_TIMEZONE=America/Los_Angeles
+XDEBUG=FALSE
+
+
+# ==============================
+# APACHE
+# ==============================
+SERVER_NAME="${DONUTFY_STORE_URL_PROD}"
+WEB_ROOT="${DOCUMENT_ROOT}"
+SKIP_PERMISSIONS=true
+DIRECTORY_PERMISSION=775
+FILE_PERMISSION=664
+INCLUDE_HTPASSWD=false
+HTPASSWD_USER=tugboat
+HTPASSWD_PASS=tugboat
+WHITELIST_IP=
+SSL_CERT_TYPE=CERTBOT
+SSL_EMAIL=tugboat@coolblueweb.net
+SSL_CERTIFICATE_FILE=/etc/apache2/ssl/apache.crt
+SSL_CERTIFICATE_KEY_FILE=/etc/apache2/ssl/apache.key
+SSL_CERTIFICATE_CHAIN_FILE=/etc/apache2/ssl.crt/server-ca.crt
+
+
+#USERS
+ROOT_USER_PASS=tugboat_web_root
+DEV_USER_PASS=tugboat_web_dev
+
+
+#CUSTOM SCRIPTS
+BUILD_FILES=false
+
+
+#WEBMIN
+USE_WEBMIN=false
+
+
+# ==============================
+# WORDPRESS
+# ==============================
+
+
+WORDPRESS_DB_HOST=mysqldb1
+WORDPRESS_DB_USER=admin
+WORDPRESS_DB_PASSWORD=tugboat_mysql_admin
+WORDPRESS_DB_NAME=wordpress
+
+```
+Edit wp-config.php
+
+```
+define( 'DB_NAME', 'store-wordpress' );
+/** Database username */
+define( 'DB_USER', 'root' );
+/** Database password */
+define( 'DB_PASSWORD', 'tugboat_mysql_root' );
+/** Database hostname */
+define( 'DB_HOST', 'mysqldb1' );
+/** Allow plugins and themes to be installed */
+define('FS_METHOD', 'direct');
+
+```
+Create .htaccess file in root directory
+```
+Create .htaccess file in root directory
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
 ```
 - - - -
 
