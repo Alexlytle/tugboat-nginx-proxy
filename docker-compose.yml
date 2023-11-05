@@ -7,7 +7,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - "/etc/certs:/etc/nginx/certs"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "./my_custom_proxy_settings.conf:/etc/nginx/conf.d/my_custom_proxy_settings.conf"
     networks:
       - app
   example1:
