@@ -254,6 +254,10 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
 </IfModule>
 ```
+
+# MYSQL env 
+Go to this directory to find env variables and passwords to edit
+mount/mysqldb1/.env
 - - - -
 
 ##  Supported Versions:
