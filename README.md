@@ -232,9 +232,9 @@ Edit wp-config.php
 ```
 define( 'DB_NAME', 'store-wordpress' );
 /** Database username */
-define( 'DB_USER', 'root' );
+define( 'DB_USER', 'username' );
 /** Database password */
-define( 'DB_PASSWORD', 'tugboat_mysql_root' );
+define( 'DB_PASSWORD', 'password' );
 /** Database hostname */
 define( 'DB_HOST', 'mysqldb1' );
 /** Allow plugins and themes to be installed */
