@@ -109,12 +109,13 @@ USE_WEBMIN=false
 4. Run the following:
 ```docker-compose down & docker compose up -d ```
 At this point you can create a hello world app in
-``` /var/www/html/index.html ```
+``` /var/www/html ```
 5.  zsh into the container to do npm and artisan things. Where it says "tugboat_example" change this with the correct container name which can be find be using this command
 ``` docker exec -it tugboat_example zsh ```
-6. Install Laravel:
+6. Make sure you change the laravel env file to point to public WEB_ROOT="/var/www/html/public"
+7. Install Laravel while inside container:
 ``` composer create-project laravel/laravel ./ ```
-Give permissions:
+Give permissions while inside container:
 ``` 
 chown -R www-data:www-data \
         /var/www/html/storage \
